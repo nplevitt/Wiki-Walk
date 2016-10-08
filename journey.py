@@ -41,7 +41,7 @@ for step in shortest_path[1:]:
     time.sleep(4)
     try:
         element.click()
-    except 'ElementNotVisibleException':
+    except:
         driver.get(mainWikiURL % template_wikiURL % step)
 
 
