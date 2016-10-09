@@ -13,6 +13,17 @@ import time
 from selenium import webdriver
 from Tkinter import *
 #
+
+def highlight(element):
+    """Highlights (blinks) a Selenium Webdriver element"""
+    driver = element._parent
+    def apply_style(s):
+        driver.execute_script("arguments[0].setAttribute('style', arguments[1]);",
+                              element, s)
+    original_style = element.get_attribute('style')
+    apply_style("background: yellow; border: 2px solid red;")
+
+
 driver = webdriver.Chrome('/usr/local/bin/chromedriver')  # Optional argument, if not specified will search path.
 mainWikiURL = "https://en.wikipedia.org%s"
 template_wikiURL = "/wiki/%s"
@@ -35,10 +46,12 @@ start_URL = mainWikiURL % template_wikiURL % shortest_path[0]
 driver.get(start_URL)
 #
 for step in shortest_path[1:]:
-
+    time.sleep(2.5)
     element = driver.find_elements_by_xpath('//a[@href="%s"]' % template_wikiURL % step)[0]
     driver.execute_script("return arguments[0].scrollIntoView();", element)
-    time.sleep(4)
+    time.sleep(.5)
+    highlight(element)
+    time.sleep(2)
     try:
         element.click()
     except:
