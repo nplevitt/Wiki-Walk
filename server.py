@@ -133,7 +133,7 @@ def dictToDot(d):
 def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"
-    for i in range(len(path)-2):
+    for i in range(len(path)-1):
         dot += '\t"' + str(path[i]) + '" -> "' + str(path[i+1]) + '";\n'
     dot += "}"
     file = open("static/path_graph.txt", "w")

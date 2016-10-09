@@ -8,5 +8,6 @@ digraph g {
 	"Biology" -> "Natural_science";
 	"Natural_science" -> "Astronomy";
 	"Astronomy" -> "Asteroid";
-	"Asteroid" -> "C-type_asteroid";
+	"Asteroid" -> "NEAR_Shoemaker";
+	"NEAR_Shoemaker" -> "433_Eros";
 }
