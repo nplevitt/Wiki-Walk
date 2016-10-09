@@ -177,6 +177,11 @@ def links(searchString):
 
 	html = """
 	<html>
+	<head>
+	<br>
+    <form action="/">
+    Click here to go back to the beginning <input type="submit" value="Go back" class="tfbutton">
+    </head>
 	<body>
 	<header>
 	<img src=%s></img>

@@ -1,6 +1,7 @@
 digraph g {
 	rankdir=LR;
-	"10_Hygiea" -> "C-type_asteroid";
-	"C-type_asteroid" -> "Asteroid";
-	"Asteroid" -> "NEAR_Shoemaker";
+	"Abiogenesis" -> "Astrobiology";
+	"Astrobiology" -> "Life_science";
+	"Life_science" -> "Biotechnology";
+	"Biotechnology" -> "Medicine";
 }
