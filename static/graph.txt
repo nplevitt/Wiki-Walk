@@ -1,0 +1,5 @@
+digraph g {
+	rankdir=LR;
+	"cheese" -> "mouthfeel";
+	"mouthfeel" -> "force";
+}
