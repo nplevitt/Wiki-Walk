@@ -1,35 +1,6 @@
-# 692-GroupProj
-Group Project repo for MSAN 692 final
-
-1. Create account on https://en.wikipedia.org/wiki/Main_Page
-
-2. Run: (This will guide through configuration options: I selcted 22 (wikipedia) for the wiki family we will be pulling from)
-
-      git clone https://gerrit.wikimedia.org/r/pywikibot/core.git
-
-      cd core
-
-      git submodule update --init
-
-      python pwb.py script_name
-
-
-3. Usage
-
-
-      import pywikibot
-
-      site = pywikibot.Site('en', 'wikipedia')
-
-
-To iterate over many pages, this returns a set of pages from a category:
-
-    cat = pywikibot.Category(site,'Category:Living people')
-
-
 # Project Description
 
-The goal of this project is to create a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are.
+The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. 
 
 # Executive Summary
 
