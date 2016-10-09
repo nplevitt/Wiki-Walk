@@ -1,0 +1,6 @@
+digraph g {
+	rankdir=LR;
+	"10_Hygiea" -> "C-type_asteroid";
+	"C-type_asteroid" -> "Asteroid";
+	"Asteroid" -> "NEAR_Shoemaker";
+}
