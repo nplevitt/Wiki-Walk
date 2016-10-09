@@ -1,13 +1,14 @@
 digraph g {
 	rankdir=LR;
-	"433_Eros" -> "NEAR_Shoemaker";
-	"NEAR_Shoemaker" -> "Asteroid";
-	"Asteroid" -> "Astronomy";
-	"Astronomy" -> "Natural_science";
-	"Natural_science" -> "Biology";
-	"Biology" -> "Life_science";
-	"Life_science" -> "Biotechnology";
-	"Biotechnology" -> "Biomedical_engineering";
-	"Biomedical_engineering" -> "Interdisciplinarity";
-	"Interdisciplinarity" -> "Academic_discipline";
+	"Active_SETI" -> "Interstellar_communication";
+	"Interstellar_communication" -> "SETI";
+	"SETI" -> "Extraterrestrial_life";
+	"Extraterrestrial_life" -> "Astrobiology";
+	"Astrobiology" -> "Life_science";
+	"Life_science" -> "Biology";
+	"Biology" -> "Organism";
+	"Organism" -> "Microorganism";
+	"Microorganism" -> "Microbiology";
+	"Microbiology" -> "Virology";
+	"Virology" -> "Virology_(journal)";
 }
