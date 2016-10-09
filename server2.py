@@ -1,4 +1,4 @@
-# -- coding: utf-8 --	
+# -- coding: utf-8 --
 
 from flask import Flask, request, render_template, redirect
 import urllib2
@@ -229,6 +229,10 @@ def render_path():
     <br>
     <form action="/take_journey" method="post">
     <input type="submit" value="Take The Journey" class="tfbutton">
+    <form action="/start_over" method="post">
+    <input type="submit" value="Select Again" class="tfbutton">
+    <br>
+    <br>
     </body>
     </html>
     """

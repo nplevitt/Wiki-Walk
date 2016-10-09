@@ -171,42 +171,15 @@ def get_connected_w_dict(root, limit=100, per_page=5):
 
         count += 1
 
+        if (len(set(list_of_hit)) % 50) == 0:
+            with open('Full_Graph_%d.txt' % len(set(list_of_hit)), 'w') as f:
+                f.write('\t'.join(list_of_names))
+
     return list_of_names, list_of_hit
 
 
-# num_children = 5
-# list_of_names, list_of_hit = get_connected_w_dict('Microorganism',
-#                                      limit=50, per_page=num_children)
-#
-# with open('Microorganism_Graph.txt', 'w') as f:
-#     f.write('\t'.join(list_of_names))
-#
-# start_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
-# end_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
+num_children = 5
 
-# paths = get_all_paths(list_of_names, start_node, end_node, num_children)
-# path_lengths = [len(p) for p in paths]
-# shortest_path = paths[path_lengths.index(min(path_lengths))]
-# print "There were a total of %d paths from %s to %s " % (len(paths), start_node, end_node)
-# print "The shortest path is:"
-# print ' --> '.join(shortest_path)
-
-
-#
-# # # num_children = 5
-# # # list_of_names, graph = link_iterative('New_York_Park_Association', limit=10, per_page=num_children)
-# start_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
-# end_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
-#
-# paths = get_all_paths(list_of_names, start_node, end_node, num_children)
-# path_lengths = [len(p) for p in paths]
-# shortest_path = paths[path_lengths.index(min(path_lengths))]
-
-#
-# # # # # # print 'All paths from %s to %s: '  % (start_node, end_node)
-# # # # # # for p in paths:
-# # # # # #     print ' --> '.join(p)
-#
 
 # #
 #
@@ -305,3 +278,36 @@ def get_connected_w_dict(root, limit=100, per_page=5):
 #         count += 1
 #
 #     return list_of_names
+
+# list_of_names, list_of_hit = get_connected_w_dict('Biology',
+#                                      limit=400, per_page=num_children)
+#
+# with open('Microorganism_Graph.txt', 'w') as f:
+#     f.write('\t'.join(list_of_names))
+#
+# start_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
+# end_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
+
+# paths = get_all_paths(list_of_names, start_node, end_node, num_children)
+# path_lengths = [len(p) for p in paths]
+# shortest_path = paths[path_lengths.index(min(path_lengths))]
+# print "There were a total of %d paths from %s to %s " % (len(paths), start_node, end_node)
+# print "The shortest path is:"
+# print ' --> '.join(shortest_path)
+
+
+#
+# # # num_children = 5
+# # # list_of_names, graph = link_iterative('New_York_Park_Association', limit=10, per_page=num_children)
+# start_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
+# end_node = list(set(list_of_names))[random.randint(0, len(set(list_of_names))-1)]
+#
+# paths = get_all_paths(list_of_names, start_node, end_node, num_children)
+# path_lengths = [len(p) for p in paths]
+# shortest_path = paths[path_lengths.index(min(path_lengths))]
+
+#
+# # # # # # print 'All paths from %s to %s: '  % (start_node, end_node)
+# # # # # # for p in paths:
+# # # # # #     print ' --> '.join(p)
+#
