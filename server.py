@@ -221,11 +221,6 @@ def path_home():
 def render_path():
     html = """
     <html>
-    <head>
-	<br>
-    <form action="/">
-    Click here to go back to the beginning <input type="submit" value="Go back" class="tfbutton">
-    </head>
     <body>
     <header>
     The Shortest Path From %s To %s Is:
