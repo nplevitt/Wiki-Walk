@@ -50,10 +50,6 @@ def getLinksFromURL(URL):
 # transformTerms: convert spaces into underscores for Wikipedia URL.
 # @param searchString: input string with spaces
 # @return searchString where eventual spaces have been replaced with underscores
-
-# print getLinksFromURL(mainWikiURL % template_wikiURL %('Pizza'))
-
-
 def transformTerms(searchString):
 	return "_".join(searchString.split()) # Something_like_this
 

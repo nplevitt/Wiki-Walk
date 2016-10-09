@@ -26,20 +26,25 @@ counter = 0 # in order to "refresh" the index.html page
 # @param URL: full Wikipedia page URL
 # @return links: list of wikiURLs ('/wiki/<page>') found in the main body
 def getLinksFromURL(URL):
-	#print "Getting links from %s" % URL
-	response = urllib2.urlopen(URL)
+	global currentPage
 
-	#html = BeautifulSoup(response, "html.parser")
-	html = BeautifulSoup(response.read().decode('utf-8', 'ignore'), "html.parser")
+	response = urllib2.urlopen(URL)
+	html = BeautifulSoup(response, "html.parser")
+	title = html.find_all('h1', {'id': 'firstHeading'})[0].text
+	currentPage = title
 
 	links = []
 	content = html.find_all('div', {'class': 'mw-content-ltr'})[0]
 	for link in content.find_all('a'):
 		href = link['href']
+		try:
+			title = link['title']
+		except:
+			title =[]
 		if (href.startswith('/wiki/')) and (":" not in href) and (href not in links):
 			term = href.split("#")[0]
 			term = urllib2.quote(term,':/') # keep all the %CE codes
-			links.append(term) # remove trailing "#" if it has one
+			links.append((term,title)) # remove trailing "#" if it has one
 
 	return links
 
@@ -59,7 +64,7 @@ def getLinksFromSearchString(searchString):
 	URL = mainWikiURL % searchURL
 	try:
 		return getLinksFromURL(URL)
-	except Exception, e:
+	except:
 		return ["%s is not a valid search term" % searchString]
 
 # htmlList: from a list of links from a Wikipedia page (using terms from <searchString>),
@@ -77,7 +82,7 @@ def htmlList(listOfLinks, searchString):
 
 	if len(listOfLinks)==1:
 		html_header = "<tr><th>%s: 0 links</th></tr>" % searchString
-		html_entry = "<tr><td>%s</td></tr>" % listOfLinks[0]
+		html_entry = "<tr><td>%s</td></tr>" % listOfLinks[0][0]
 		html = html_template % (html_header, html_entry)
 		return html
 	else:
@@ -86,9 +91,13 @@ def htmlList(listOfLinks, searchString):
 		html_entries_template = "<tr><td><a href='%s'>%s</a></tr></td>"
 		html_entries = ""
 		for link in listOfLinks:
-			linkHref = link.split("/wiki/")[1]
-			linkText = urllib2.unquote(linkHref)
-			html_entries += html_entries_template % (linkHref, linkText)
+			linkHref = link[0].split("/wiki/")[1]
+			try:
+				linkTitle = link[1]
+			except:
+				linkTitle = ''
+			# linkText = urllib2.unquote(linkHref)
+			html_entries += html_entries_template % (linkHref,linkTitle)
 		html = html_template % (html_header, html_entries)
 		return html
 
@@ -112,7 +121,7 @@ def dictToDot(d):
 	dot += "\trankdir=LR;\n"
 	for key in d.keys():
 		for value in d[key]:
-			dot += '\t"' + key + '" -> "' + value + '";\n'
+			dot += '\t"' + key.encode('ascii', errors='ignore') + '" -> "' + value.encode('ascii', errors='ignore') + '";\n'
 	dot += "}"
 	file = open("static/graph.txt", "w")
 	file.write(dot)
@@ -167,9 +176,9 @@ def links(searchString):
 	"""
 
 	# transform into wiki format
-	currentPage = transformTerms(searchString)
+	trSearchString = transformTerms(searchString)
 	# get list of links
-	listOfLinks = getLinksFromSearchString(currentPage)
+	listOfLinks = getLinksFromSearchString(trSearchString)
 	# create html table
 	table = htmlList(listOfLinks, currentPage)
 	# update visited links and dictionary

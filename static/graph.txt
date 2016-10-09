@@ -1,8 +1,8 @@
 digraph g {
 	rankdir=LR;
-	"Reykjav%C3%ADk_Mosque" -> "Reykjav%C3%ADk";
-	"iceland" -> "Reykjav%C3%ADk";
-	"Reykjav%C3%ADk" -> "Dagur_Berg%C3%BE%C3%B3ruson_Eggertsson";
-	"%C3%93lafur_F._Magn%C3%BAsson" -> "Reykjav%C3%ADk_Mosque";
-	"Dagur_Berg%C3%BE%C3%B3ruson_Eggertsson" -> "%C3%93lafur_F._Magn%C3%BAsson";
+	"President of Italy" -> "Italian Republic (Napoleonic)";
+	"Iceland" -> "Italy";
+	"Italy" -> "President of Italy";
+	"Francesco Melzi d'Eril" -> "Treaty of Lunville";
+	"Italian Republic (Napoleonic)" -> "Francesco Melzi d'Eril";
 }
