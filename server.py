@@ -5,7 +5,6 @@ import urllib2
 from bs4 import BeautifulSoup
 import os
 import random
-import urllib
 
 mainWikiURL = "https://en.wikipedia.org%s"
 template_wikiURL = "/wiki/%s"
