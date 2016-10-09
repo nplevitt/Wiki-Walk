@@ -1,5 +1,5 @@
 digraph g {
 	rankdir=LR;
-	"Iceland" -> "Lofsngur";
-	"Lofsngur" -> "Sveinbjrn Sveinbjrnsson";
+	"List of pizza chains" -> "Meatball pizza";
+	"Pizza" -> "List of pizza chains";
 }

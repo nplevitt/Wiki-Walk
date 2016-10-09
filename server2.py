@@ -134,7 +134,7 @@ def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"
     for i in range(len(path)-1):
-        dot += '\t"' + str(path[i]) + '" -> "' + str(path[i+1]) + '";\n'
+        dot += '\t"' + str(path[i]).encode('ascii', errors='ignore') + '" -> "' + str(path[i+1]).encode('ascii', errors='ignore') + '";\n'
     dot += "}"
     file = open("static/path_graph.txt", "w")
     file.write(dot)
@@ -161,7 +161,7 @@ def home():
 	global counter
 	counter = 0
 
-	return render_template('index.html')
+	return render_template('combined_page.html')
 	#return app.send_static_file("index.html")
 
 @app.route("/links/", methods=['POST'])
