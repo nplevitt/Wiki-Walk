@@ -1,10 +1,12 @@
 # -- coding: utf-8 --	
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 import urllib2
 from bs4 import BeautifulSoup
 import os
 import random
+from getWikiSubset import *
+from journey import *
 
 mainWikiURL = "https://en.wikipedia.org%s"
 template_wikiURL = "/wiki/%s"
@@ -128,6 +130,18 @@ def dictToDot(d):
 	os.system('dot -Tpng static/graph.txt > static/graph.png')
 	return dot
 
+def dictToDotPath(path):
+    dot = "digraph g {\n"
+    dot += "\trankdir=LR;\n"
+    for i in range(len(path)-2):
+        dot += '\t"' + str(path[i]) + '" -> "' + str(path[i+1]) + '";\n'
+    dot += "}"
+    file = open("static/path_graph.txt", "w")
+    file.write(dot)
+    file.close()
+    os.system('dot -Tpng static/path_graph.txt > static/path_graph.png')
+    return dot
+
 ############################# Flask stuff
 
 app = Flask(__name__)
@@ -193,5 +207,75 @@ def links(searchString):
 	counter += 1
 
 	return returnHtml
+
+@app.route("/get_path", methods =['GET'])
+def path_home():
+    return render_template('get_path.html')
+
+@app.route("/show_path", methods = ['GET', 'POST'])
+def render_path():
+    html = """
+    <html>
+    <body>
+    <header>
+    The Shortest Path From %s To %s Is:
+    <img src=%s></img>
+    </header>
+    <br>
+    <form action="/take_journey" method="post">
+    <input type="submit" value="Take The Journey" class="tfbutton">
+    </body>
+    </html>
+    """
+    response = redirect('/take_journey')
+    start_node = request.cookies.get('start_node') # get cookie called 'ID'
+    end_node = request.cookies.get('end_node') # get cookie called 'ID'
+    response.set_cookie('start_node', value=start_node)
+    response.set_cookie('end_node', value=end_node)
+
+    with open('trees/Full_Graph_400.txt', 'r') as f:
+        graph = f.read().split('\t')
+
+    paths = get_all_paths(graph, start_node, end_node, 5)
+    path_lengths = [len(p) for p in paths]
+    shortest_path = paths[path_lengths.index(min(path_lengths))]
+    dictToDotPath(shortest_path)
+    imageURL = "/static/path_graph.png?r=%s" % random.randint(0, 10000)
+    return html % (start_node, end_node, imageURL)
+
+@app.route("/set_nodes", methods = ['GET', 'POST'])
+def set_nodes():
+    start_node = request.form['startlocation']
+    end_node = request.form['endlocation']
+    response = redirect('/show_path')
+    response.set_cookie('start_node', value=start_node)
+    response.set_cookie('end_node', value=end_node)
+    return response
+
+@app.route("/take_journey", methods = ['GET', 'POST'])
+def take_journey():
+    html = """
+    <html>
+    <body>
+    <header>
+    Thank You For Taking The Journey From %s To %s \n
+    Click Below To Do It Again
+    <form action="/start_over" method="post">
+    <input type="submit" value="Take Another Journey" class="tfbutton">
+    </header>
+    </body>
+    </html>
+    """
+
+    start_node = request.cookies.get('start_node') # get cookie called 'ID'
+    end_node = request.cookies.get('end_node') # get cookie called 'ID'
+    takeJourney(start_node, end_node)
+
+    return html % (start_node, end_node)
+
+@app.route("/start_over", methods = ['GET', 'POST'])
+def start_over():
+    response = redirect('/get_path')
+    return response
 
 app.run() # kickstart your flask server
