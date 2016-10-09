@@ -1,8 +1,0 @@
-digraph g {
-	rankdir=LR;
-	"President of Italy" -> "Italian Republic (Napoleonic)";
-	"Iceland" -> "Italy";
-	"Italy" -> "President of Italy";
-	"Francesco Melzi d'Eril" -> "Treaty of Lunville";
-	"Italian Republic (Napoleonic)" -> "Francesco Melzi d'Eril";
-}
