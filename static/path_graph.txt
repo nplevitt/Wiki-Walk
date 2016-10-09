@@ -1,5 +1,6 @@
 digraph g {
 	rankdir=LR;
+<<<<<<< HEAD
 	"Asteroid" -> "Astronomy";
 	"Astronomy" -> "Natural_science";
 	"Natural_science" -> "Biology";
@@ -7,4 +8,16 @@ digraph g {
 	"Life_science" -> "Astrobiology";
 	"Astrobiology" -> "Abiogenesis";
 	"Abiogenesis" -> "Earth";
+=======
+	"%C3%84lmhult_Municipality" -> "Carl_Linnaeus";
+	"Carl_Linnaeus" -> "Taxonomy_(biology)";
+	"Taxonomy_(biology)" -> "Domain_(biology)";
+	"Domain_(biology)" -> "Life";
+	"Life" -> "Biology";
+	"Biology" -> "Natural_science";
+	"Natural_science" -> "Astronomy";
+	"Astronomy" -> "Asteroid";
+	"Asteroid" -> "NEAR_Shoemaker";
+	"NEAR_Shoemaker" -> "433_Eros";
+>>>>>>> 72dde653d545b654faeb026e83ae40966c10519a
 }
