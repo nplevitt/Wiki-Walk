@@ -1,5 +1,7 @@
 digraph g {
 	rankdir=LR;
-	"List of pizza chains" -> "Meatball pizza";
-	"Pizza" -> "List of pizza chains";
+	"New York-style pizza" -> "Pizza";
+	"California-style pizza" -> "New Haven-style pizza";
+	"New Haven-style pizza" -> "New York-style pizza";
+	"Pizza" -> "California-style pizza";
 }
