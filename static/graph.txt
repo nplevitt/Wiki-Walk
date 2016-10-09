@@ -1,5 +1,10 @@
 digraph g {
 	rankdir=LR;
-	"cheese" -> "mouthfeel";
-	"mouthfeel" -> "force";
+	"science" -> "chemistry";
+	"ion" -> "chemistry";
+	"chemistry_(disambiguation)" -> "zeebee";
+	"atom" -> "ion";
+	"chemistry" -> "atom";
+	"chemistry" -> "chemistry_(disambiguation)";
+	"geography" -> "science";
 }
