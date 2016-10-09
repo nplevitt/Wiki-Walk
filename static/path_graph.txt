@@ -1,5 +1,6 @@
 digraph g {
 	rankdir=LR;
+<<<<<<< HEAD
 	"%C3%84lmhult_Municipality" -> "Carl_Linnaeus";
 	"Carl_Linnaeus" -> "Taxonomy_(biology)";
 	"Taxonomy_(biology)" -> "Domain_(biology)";
@@ -10,4 +11,17 @@ digraph g {
 	"Microorganism" -> "Unicellular_organism";
 	"Unicellular_organism" -> "Eukaryotic";
 	"Eukaryotic" -> "%C3%89douard_Chatton";
+=======
+	"Active_SETI" -> "Interstellar_communication";
+	"Interstellar_communication" -> "SETI";
+	"SETI" -> "Extraterrestrial_life";
+	"Extraterrestrial_life" -> "Astrobiology";
+	"Astrobiology" -> "Life_science";
+	"Life_science" -> "Biology";
+	"Biology" -> "Organism";
+	"Organism" -> "Microorganism";
+	"Microorganism" -> "Microbiology";
+	"Microbiology" -> "Virology";
+	"Virology" -> "Virology_(journal)";
+>>>>>>> 6187718220ace67c6c51840ecabb8ccedfd8b3bd
 }
