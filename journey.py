@@ -28,7 +28,7 @@ driver = webdriver.Chrome('/usr/local/bin/chromedriver')  # Optional argument, i
 mainWikiURL = "https://en.wikipedia.org%s"
 template_wikiURL = "/wiki/%s"
 #
-with open('Microorganism_Graph.txt', 'r') as f:
+with open('trees/Full_Graph_400.txt', 'r') as f:
     graph = f.read().split('\t')
 
 node_picks = list(set([e for e in graph if e != 'abcdefg']))
@@ -40,22 +40,24 @@ paths = get_all_paths(graph, start_node, end_node, 5)
 path_lengths = [len(p) for p in paths]
 shortest_path = paths[path_lengths.index(min(path_lengths))]
 
-print shortest_path
+print "There were a total of %d paths from %s to %s " % (len(paths), start_node, end_node)
+print "The shortest path is:"
+print ' --> '.join(shortest_path)
 
 start_URL = mainWikiURL % template_wikiURL % shortest_path[0]
-driver.get(start_URL)
-#
-for step in shortest_path[1:]:
-    time.sleep(2.5)
-    element = driver.find_elements_by_xpath('//a[@href="%s"]' % template_wikiURL % step)[0]
-    driver.execute_script("return arguments[0].scrollIntoView();", element)
-    time.sleep(.5)
-    highlight(element)
-    time.sleep(2)
-    try:
-        element.click()
-    except:
-        driver.get(mainWikiURL % template_wikiURL % step)
+# driver.get(start_URL)
+# #
+# for step in shortest_path[1:]:
+#     time.sleep(2.5)
+#     element = driver.find_elements_by_xpath('//a[@href="%s"]' % template_wikiURL % step)[0]
+#     driver.execute_script("return arguments[0].scrollIntoView();", element)
+#     time.sleep(.5)
+#     highlight(element)
+#     time.sleep(2)
+#     try:
+#         element.click()
+#     except:
+#         driver.get(mainWikiURL % template_wikiURL % step)
 
 
 

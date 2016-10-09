@@ -171,12 +171,16 @@ def get_connected_w_dict(root, limit=100, per_page=5):
 
         count += 1
 
+        if (len(set(list_of_hit)) % 50) == 0:
+            with open('Full_Graph_%d.txt' % len(set(list_of_hit)), 'w') as f:
+                f.write('\t'.join(list_of_names))
+
     return list_of_names, list_of_hit
 
 
-# num_children = 5
-# list_of_names, list_of_hit = get_connected_w_dict('Microorganism',
-#                                      limit=50, per_page=num_children)
+num_children = 5
+# list_of_names, list_of_hit = get_connected_w_dict('Biology',
+#                                      limit=400, per_page=num_children)
 #
 # with open('Microorganism_Graph.txt', 'w') as f:
 #     f.write('\t'.join(list_of_names))

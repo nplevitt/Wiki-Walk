@@ -1,11 +1,11 @@
 
-with open('Microorganism_Graph.txt', 'r') as f:
+with open('Full_Graph_400.txt', 'r') as f:
     graph = f.read().split('\t')
 
-node_picks = list(set([e for e in graph if e != 'abcdefg']))
+node_picks = set([e for e in graph if e != 'abcdefg'])
 html_list = """"""
-for element in node_picks:
-    html_list = html_list + '<option value="%s">%s</option>' % (element, element)
+for element in sorted(node_picks):
+    html_list = html_list + '<option value="%s">%s</option>\n' % (element, element)
 
-with open('html_select.txt', 'w') as f:
+with open('html_select_full.txt', 'w') as f:
     f.write(html_list)
