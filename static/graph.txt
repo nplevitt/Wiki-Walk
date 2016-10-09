@@ -1,11 +1,4 @@
 digraph g {
 	rankdir=LR;
-<<<<<<< HEAD
-	"Iceland" -> "Flag of Iceland";
-=======
-	"New York-style pizza" -> "Pizza";
-	"California-style pizza" -> "New Haven-style pizza";
-	"New Haven-style pizza" -> "New York-style pizza";
-	"Pizza" -> "California-style pizza";
->>>>>>> 6187718220ace67c6c51840ecabb8ccedfd8b3bd
+	"Italy" -> "Il Canto degli Italiani";
 }
