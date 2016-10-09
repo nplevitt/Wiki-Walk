@@ -44,7 +44,7 @@ def getLinksFromURL(URL):
 			title =[]
 		if (href.startswith('/wiki/')) and (":" not in href) and (href not in links):
 			term = href.split("#")[0]
-			term = urllib2.quote(term,':/') # keep all the %CE codes
+			term = urllib2.quote(term,':/') # keep all the %xx URL codes
 			links.append((term,title)) # remove trailing "#" if it has one
 
 	return links
@@ -134,7 +134,8 @@ def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"
     for i in range(len(path)-1):
-        dot += '\t"' + str(path[i]) + '" -> "' + str(path[i+1]) + '";\n'
+    	print unicode(path[i]).encode('ascii', errors='ignore')
+        dot += '\t"' + path[i] + '" -> "' + path[i+1] + '";\n'
     dot += "}"
     file = open("static/path_graph.txt", "w")
     file.write(dot)
@@ -161,7 +162,7 @@ def home():
 	global counter
 	counter = 0
 
-	return render_template('index.html')
+	return render_template('combined_page.html')
 	#return app.send_static_file("index.html")
 
 @app.route("/links/", methods=['POST'])
@@ -238,7 +239,11 @@ def render_path():
     """
     response = redirect('/take_journey')
     start_node = request.cookies.get('start_node') # get cookie called 'ID'
+    unicode_start_node = urllib2.unquote(start_node)#.decode('utf8') 
+    ascii_start_node = unicode_start_node.encode('ascii', errors='ignore')
     end_node = request.cookies.get('end_node') # get cookie called 'ID'
+    unicode_end_node = urllib2.unquote(end_node)#.decode('utf8') 
+    ascii_end_node = unicode_end_node.encode('ascii', errors='ignore')
     response.set_cookie('start_node', value=start_node)
     response.set_cookie('end_node', value=end_node)
 
@@ -250,7 +255,9 @@ def render_path():
     shortest_path = paths[path_lengths.index(min(path_lengths))]
     dictToDotPath(shortest_path)
     imageURL = "/static/path_graph.png?r=%s" % random.randint(0, 10000)
-    return html % (start_node, end_node, imageURL)
+
+    print start_node, unicode_start_node, ascii_start_node
+    return html % (unicode_start_node, unicode_end_node, imageURL)
 
 @app.route("/set_nodes", methods = ['GET', 'POST'])
 def set_nodes():

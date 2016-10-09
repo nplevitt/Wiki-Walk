@@ -1,5 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"Iceland" -> "Lofsngur";
-	"Lofsngur" -> "Sveinbjrn Sveinbjrnsson";
+	"Iceland" -> "Flag of Iceland";
 }
