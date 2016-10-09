@@ -1,8 +1,5 @@
 digraph g {
 	rankdir=LR;
-	"Reykjav%C3%ADk_Mosque" -> "Reykjav%C3%ADk";
-	"iceland" -> "Reykjav%C3%ADk";
-	"Reykjav%C3%ADk" -> "Dagur_Berg%C3%BE%C3%B3ruson_Eggertsson";
-	"%C3%93lafur_F._Magn%C3%BAsson" -> "Reykjav%C3%ADk_Mosque";
-	"Dagur_Berg%C3%BE%C3%B3ruson_Eggertsson" -> "%C3%93lafur_F._Magn%C3%BAsson";
+	"Italy" -> "Italians";
+	"pizza" -> "Italy";
 }
