@@ -1,8 +1,11 @@
+# -- coding: utf-8 --	
+
 from flask import Flask, request, render_template
 import urllib2
 from bs4 import BeautifulSoup
 import os
 import random
+import urllib
 
 mainWikiURL = "https://en.wikipedia.org%s"
 template_wikiURL = "/wiki/%s"
@@ -17,7 +20,7 @@ previousPage = ""
 visitedPages = {} # dictionary
 visitedLinks = [] # list
 
-counter = 0
+counter = 0 # in order to "refresh" the index.html page
 
 # getLinksFromURL: get all links inside body of Wikipedia article.
 # @param URL: full Wikipedia page URL
@@ -25,14 +28,18 @@ counter = 0
 def getLinksFromURL(URL):
 	#print "Getting links from %s" % URL
 	response = urllib2.urlopen(URL)
-	html = BeautifulSoup(response, "html.parser")
+
+	#html = BeautifulSoup(response, "html.parser")
+	html = BeautifulSoup(response.read().decode('utf-8', 'ignore'), "html.parser")
 
 	links = []
 	content = html.find_all('div', {'class': 'mw-content-ltr'})[0]
 	for link in content.find_all('a'):
 		href = link['href']
 		if (href.startswith('/wiki/')) and (":" not in href) and (href not in links):
-			links.append(href.split("#")[0]) # remove trailing "#" if it has one
+			term = href.split("#")[0]
+			term = urllib2.quote(term,':/') # keep all the %CE codes
+			links.append(term) # remove trailing "#" if it has one
 
 	return links
 
@@ -40,7 +47,7 @@ def getLinksFromURL(URL):
 # @param searchString: input string with spaces
 # @return searchString where eventual spaces have been replaced with underscores
 def transformTerms(searchString):
-	return "_".join(searchString.lower().split()) # Something_like_this
+	return "_".join(searchString.split()) # Something_like_this
 
 # getLinksFromSearchString: convert input search terms as a string into
 # a potentially valid Wikipedia URL, and get the list of links in that page.
@@ -79,9 +86,9 @@ def htmlList(listOfLinks, searchString):
 		html_entries_template = "<tr><td><a href='%s'>%s</a></tr></td>"
 		html_entries = ""
 		for link in listOfLinks:
-			linkText = link.split("/wiki/")[1]
-			linkTransformed = linkText
-			html_entries += html_entries_template % (linkTransformed, linkText)
+			linkHref = link.split("/wiki/")[1]
+			linkText = urllib2.unquote(linkHref)
+			html_entries += html_entries_template % (linkHref, linkText)
 		html = html_template % (html_header, html_entries)
 		return html
 
@@ -144,6 +151,7 @@ def post_links():
 def links(searchString):
 	global currentPage
 	global previousPage
+	global counter
 
 	html = """
 	<html>
@@ -173,11 +181,9 @@ def links(searchString):
 	# assemble final html
 	imageURL = "/static/graph.png?r=%s" % random.randint(0,10000)
 	returnHtml = html % (imageURL, " --> ".join(visitedLinks), table)
-
-	global counter
+	# update counter for index.html to refresh
 	counter += 1
-	#print visitedPages
-	#print dot
+
 	return returnHtml
 
 app.run() # kickstart your flask server
