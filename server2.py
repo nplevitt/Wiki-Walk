@@ -44,7 +44,7 @@ def getLinksFromURL(URL):
 			title =[]
 		if (href.startswith('/wiki/')) and (":" not in href) and (href not in links):
 			term = href.split("#")[0]
-			term = urllib2.quote(term,':/') # keep all the %CE codes
+			term = urllib2.quote(term,':/') # keep all the %xx URL codes
 			links.append((term,title)) # remove trailing "#" if it has one
 
 	return links
@@ -134,7 +134,7 @@ def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"
     for i in range(len(path)-1):
-        dot += '\t"' + str(path[i]).encode('ascii', errors='ignore') + '" -> "' + str(path[i+1]).encode('ascii', errors='ignore') + '";\n'
+        dot += '\t"' + urllib2.unquote(path[i]) + '" -> "' + urllib2.unquote(path[i+1]) + '";\n'
     dot += "}"
     file = open("static/path_graph.txt", "w")
     file.write(dot)
@@ -229,8 +229,6 @@ def render_path():
     <br>
     <form action="/take_journey" method="post">
     <input type="submit" value="Take The Journey" class="tfbutton">
-    <form action="/start_over" method="post">
-    <input type="submit" value="Select Again" class="tfbutton">
     <br>
     <br>
     </body>
@@ -250,7 +248,8 @@ def render_path():
     shortest_path = paths[path_lengths.index(min(path_lengths))]
     dictToDotPath(shortest_path)
     imageURL = "/static/path_graph.png?r=%s" % random.randint(0, 10000)
-    return html % (start_node, end_node, imageURL)
+
+    return html % (urllib2.unquote(start_node), urllib2.unquote(end_node), imageURL)
 
 @app.route("/set_nodes", methods = ['GET', 'POST'])
 def set_nodes():
