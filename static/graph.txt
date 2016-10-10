@@ -1,6 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"President of Italy" -> "Italy";
 	"Italy" -> "President of Italy";
-	"Italy" -> "European Union";
 }

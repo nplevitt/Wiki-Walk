@@ -1,4 +1,4 @@
-# -- coding: utf-8 --	
+# -- coding: utf-8 --
 
 from flask import Flask, request, render_template, redirect
 import urllib2
@@ -44,7 +44,7 @@ def getLinksFromURL(URL):
 			title =[]
 		if (href.startswith('/wiki/')) and (":" not in href) and (href not in links):
 			term = href.split("#")[0]
-			term = urllib2.quote(term,':/') # keep all the %CE codes
+			term = urllib2.quote(term,':/') # keep all the %xx URL codes
 			links.append((term,title)) # remove trailing "#" if it has one
 
 	return links
@@ -134,7 +134,7 @@ def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"
     for i in range(len(path)-1):
-        dot += '\t"' + str(path[i]) + '" -> "' + str(path[i+1]) + '";\n'
+        dot += '\t"' + urllib2.unquote(path[i]) + '" -> "' + urllib2.unquote(path[i+1]) + '";\n'
     dot += "}"
     file = open("static/path_graph.txt", "w")
     file.write(dot)
@@ -161,8 +161,7 @@ def home():
 	global counter
 	counter = 0
 
-	return render_template('index.html')
-	#return app.send_static_file("index.html")
+	return render_template('combined_page.html')
 
 @app.route("/links/", methods=['POST'])
 def post_links():
@@ -229,6 +228,8 @@ def render_path():
     <br>
     <form action="/take_journey" method="post">
     <input type="submit" value="Take The Journey" class="tfbutton">
+    <br>
+    <br>
     </body>
     </html>
     """
@@ -246,7 +247,8 @@ def render_path():
     shortest_path = paths[path_lengths.index(min(path_lengths))]
     dictToDotPath(shortest_path)
     imageURL = "/static/path_graph.png?r=%s" % random.randint(0, 10000)
-    return html % (start_node, end_node, imageURL)
+
+    return html % (urllib2.unquote(start_node), urllib2.unquote(end_node), imageURL)
 
 @app.route("/set_nodes", methods = ['GET', 'POST'])
 def set_nodes():
@@ -274,7 +276,7 @@ def take_journey():
 
     start_node = request.cookies.get('start_node') # get cookie called 'ID'
     end_node = request.cookies.get('end_node') # get cookie called 'ID'
-    takeJourney(start_node, end_node)
+    takeJourney(urllib2.unquote(start_node), urllib2.unquote(end_node))
 
     return html % (start_node, end_node)
 

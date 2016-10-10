@@ -5,9 +5,9 @@ digraph g {
 	"Taxonomy_(biology)" -> "Domain_(biology)";
 	"Domain_(biology)" -> "Life";
 	"Life" -> "Biology";
-	"Biology" -> "Organism";
-	"Organism" -> "Microorganism";
-	"Microorganism" -> "Unicellular_organism";
-	"Unicellular_organism" -> "Eukaryotic";
-	"Eukaryotic" -> "Édouard_Chatton";
+	"Biology" -> "Life_science";
+	"Life_science" -> "Biotechnology";
+	"Biotechnology" -> "Medicine";
+	"Medicine" -> "Physician";
+	"Physician" -> "Bachelor_of_Medicine,_Bachelor_of_Surgery";
 }
