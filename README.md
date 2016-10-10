@@ -1,6 +1,6 @@
 # Project Description
 
-The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. 
+The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called "Build a Path" and the second is called "Find a Path".
 
 # Executive Summary
 
@@ -9,11 +9,56 @@ The goal of this project is to create a measure a relationship in terms of degre
 
 ## Overview
 
-To begin analyzing the degrees of separation between two terms found in wikipedia, we first need to acquire data. For doing this, there are several options, some of which include a full data-dump of the English language wikipedia articles, utilizing a python bot to download 5,000 articles, CURL wikipedia each time a search term is entered, or build a small collection of interconnected articles and use that as the basis for analysis.
+For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia english language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
 
-The data acquisition part of this project has proven challenging given that a full English language Wikipedia dump is too large (15GB compressed) to store on an application like PythonAnywhere. One alternative to a full dump was to obtain a subset of articles, which could be problematic since we are trying to find relationships between multiple search terms, and if the search term happens to not be included in the subset, there would be no way to calculate the degrees of separation between the terms.
+1. The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
-Another alternative to a full article dump is to use some of the wikipedia python bots that have been created and open-sourced to get up to 5,000 articles at once. There was a third alternative, which was to utilize XML dumps from the article contents which are easily sub-settable by topic or by popularity, but since the XML file contain plain-text only from the article, we would not be able to see which links are embedded in the article.
+2. **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
+
+3. **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
+
+4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
+
+5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
+
+
+## Exploration of Different Acquisition Options
+
++ The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
+
+This option had to be quickly discarded because even though the dump was successfully stored in our local machines, it would have been impossible to host on pythonanywhere.com. pythonanywhere.com limits the amount of storage on disk that is available to the user as well as the 'CPU seconds'. 'CPU seconds' would not necessarily be the limiting factor for our project since these are only used up when the CPU is actually busy. Our limiting factor was more on the storage limitations.
+
+
++ **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
+
+Using a python library that provides functionality to work with wikipedia pages seemed very reasonable since it seems like many people around the web are using it to update article content and give maintenance to content.
+
+Pywikibot allows about 5,000 article downloads without being stopped. Even though this seems like a viable solution, we need to make sure that the subset of articles is very interconnected so that there can be a shortest path solution between terms. Making sure that the subset was that interconnected proved to be a difficult task and this option had to be foregone.
+
+
++ **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
+
+This ides proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to always get the shortest path between two terms. When trying to switch to the full english interconnectedness files, storage again became a limiting factor. The English language full dump is 40GB, so this again proved impossible.
+
++ **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
+
+This was the viable solution for the data part of the 'Build a Path' part of the project.
+
+
++ Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
+
+
+# CURL Solution
+
+For the 'Build a Path' section, we use urllib2 functions, specifically urlopen(). This allows us to open a **network object** for reading. To get the URL, we get the user-input term and make a URL to send a request to. To ensure functionality, we use error handling in the URLs in the following manner.
+
+      def getLinksFromSearchString(searchString):
+      	searchURL = template_wikiURL % searchString
+      	URL = mainWikiURL % searchURL
+      	try:
+      		return getLinksFromURL(URL)
+      	except:
+      		return ["%s is not a valid search term" % searchString]
 
 ## Solution for List of Links (1st step for acquiring data)
 
@@ -51,11 +96,17 @@ Once we have the list of links from an article, we need to be able to store the 
 
 
 
-## Flask and Selenium
+## Flask, Selenium, and BeautifulSoup
+
+To get the list of links, we use BeautifulSoup to parse the html returned from our request to Wikipedia.
+
+
+To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers.
 
 
 
+# Bibliography
 
-
-
+https://docs.python.org/2/library/urllib.html
+https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
 https://docs.python.org/3/tutorial/datastructures.html
