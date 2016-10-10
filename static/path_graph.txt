@@ -1,13 +1,7 @@
 digraph g {
 	rankdir=LR;
-	"Älmhult_Municipality" -> "Carl_Linnaeus";
-	"Carl_Linnaeus" -> "Taxonomy_(biology)";
-	"Taxonomy_(biology)" -> "Domain_(biology)";
-	"Domain_(biology)" -> "Life";
 	"Life" -> "Biology";
-	"Biology" -> "Natural_science";
-	"Natural_science" -> "Astronomy";
-	"Astronomy" -> "Asteroid";
-	"Asteroid" -> "C-type_asteroid";
-	"C-type_asteroid" -> "10_Hygiea";
+	"Biology" -> "Life_science";
+	"Life_science" -> "Astrobiology";
+	"Astrobiology" -> "Abiogenesis";
 }

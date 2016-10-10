@@ -282,7 +282,7 @@ def take_journey():
 
 @app.route("/start_over", methods = ['GET', 'POST'])
 def start_over():
-    response = redirect('/get_path')
+    response = redirect('/')
     return response
 
 app.run() # kickstart your flask server
