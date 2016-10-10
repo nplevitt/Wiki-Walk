@@ -1,13 +1,8 @@
 digraph g {
 	rankdir=LR;
-	"433_Eros" -> "NEAR_Shoemaker";
-	"NEAR_Shoemaker" -> "Asteroid";
-	"Asteroid" -> "Astronomy";
-	"Astronomy" -> "Natural_science";
-	"Natural_science" -> "Biology";
-	"Biology" -> "Life_science";
-	"Life_science" -> "Biotechnology";
-	"Biotechnology" -> "Biomedical_engineering";
-	"Biomedical_engineering" -> "Interdisciplinarity";
-	"Interdisciplinarity" -> "Academic_discipline";
+	"Abiogenesis" -> "Astrobiology";
+	"Astrobiology" -> "Life_science";
+	"Life_science" -> "Biology";
+	"Biology" -> "Natural_science";
+	"Natural_science" -> "Astronomy";
 }
