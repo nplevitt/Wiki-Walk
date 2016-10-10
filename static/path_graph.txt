@@ -1,7 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"Life" -> "Biology";
-	"Biology" -> "Life_science";
-	"Life_science" -> "Astrobiology";
-	"Astrobiology" -> "Abiogenesis";
+	"Chemistry" -> "Chemistry_(disambiguation)";
 }

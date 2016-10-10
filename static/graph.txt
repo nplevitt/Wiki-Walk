@@ -1,4 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"Italy" -> "President of Italy";
+	"Iceland" -> "Lofsngur";
 }

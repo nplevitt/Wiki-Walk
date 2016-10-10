@@ -179,7 +179,7 @@ def links(searchString):
 	<head>
 	<br>
     <form action="/">
-    Click here to go back to the beginning <input type="submit" value="Go back" class="tfbutton">
+    Click here to go back to traversal selection <input type="submit" value="Go back" class="tfbutton">
     </head>
 	<body>
 	<header>
@@ -212,17 +212,13 @@ def links(searchString):
 
 	return returnHtml
 
-@app.route("/get_path", methods =['GET'])
-def path_home():
-    return render_template('get_path.html')
-
 @app.route("/show_path", methods = ['GET', 'POST'])
 def render_path():
     html = """
     <html>
     <body>
     <header>
-    The Shortest Path From %s To %s Is:
+    The shortest path from %s to %s is:
     <img src=%s></img>
     </header>
     <br>
@@ -265,10 +261,12 @@ def take_journey():
     <html>
     <body>
     <header>
-    Thank You For Taking The Journey From %s To %s \n
-    Click Below To Do It Again
+    Thank you for taking the journey from %s to %s
+    <br>
+    <br>
     <form action="/start_over" method="post">
-    <input type="submit" value="Take Another Journey" class="tfbutton">
+    Go back to traversal selection
+    <input type="submit" value="Go back" class="tfbutton">
     </header>
     </body>
     </html>
