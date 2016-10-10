@@ -14,11 +14,21 @@ header-includes:
 
 # Project Description
 
-The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**.
+The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
 
 ![Landing Page with 2 traversal method options](landing.png)
 
-# Executive Summary
+Figure 2 shows an example view of the 'Build a Path' visualization on pythonanywhere.com
+
+
+![Build Path View](build_path.png)
+
+Figure 3 shows the result of a shortest path result. 
+
+![Shortest Path View](shortest_path.png)
+
+
+\pagebreak
 
 
 # Data Acquisition
@@ -109,7 +119,7 @@ This linked list still provides challenges in the sense that in order to visuali
 
 # Solution for Degrees of Separation and 'Find a Path'
 
-As opposed to the 'Build a Path' section of the project, the 'Find a Path' needs to find the shortest path between two given terms that are user-input. This provides a challenging data acquisition project since to find a path from Article A to Article B, we need to ensure there is in a fact a way to get there using only links in each article. 
+As opposed to the 'Build a Path' section of the project, the 'Find a Path' needs to find the shortest path between two given terms that are user-input. This provides a challenging data acquisition project since to find a path from Article A to Article B, we need to ensure there is in a fact a way to get there using only links in each article.
 
 The proposed solution for this problem is the following:
 
@@ -117,13 +127,14 @@ The proposed solution for this problem is the following:
 
 2. For each article, get 5 links contained in the article (Children), making sure that each Child links back to the Parent.
 
-3. Create traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent. 
+3. Create traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent.
 
-The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file. 
+The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file.
+
 
 ### Data types for Storing hierarchical data
 
-To be able to find relationships between the terms that the user chooses (i.e find the shortest path between two terms), we need a very specific data structure. To iterate a tree-like data structure, python provides list functionality. 
+To be able to find relationships between the terms that the user chooses (i.e find the shortest path between two terms), we need a very specific data structure. To iterate a tree-like data structure, python provides list functionality.
 
 A simple example is:
 
@@ -133,30 +144,39 @@ A simple example is:
 \pagebreak
 
 ## Journey through shortest path
-As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimics that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B. 
+As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimics that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B.
 
 ![Journey Step Example](journey.png)
 
 In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality page'.
 
-Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like. 
+Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like.
 
 
-# Other tools used 
+# Other tools used
+
+## Encoding Issues
+
+Given that some of the titles in the wikipedia articles contain non-ASCII characters, we provide an automated solution where each time article information is retrieved from the web, we convert everything to ASCII characters. 
+
 
 ## Flask, Selenium, and BeautifulSoup
 
-To get the list of links, we use BeautifulSoup to parse the html returned from our request to Wikipedia.
+To get the list of links, we use **BeautifulSoup** to parse the html returned from our request to Wikipedia.
 
-To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers. 
+To provide the "journey" functionality, **Selenium** python bindings were utilized. These bindings provide API access to web-drivers or web browsers.
 
-Flask is used to provide all of the functional bindings to turn functions into html. What Flask does is map a url to a python function. This allows us to set up event methods that are mapped to a particular URL. 
+**Flask** is used to provide all of the functional bindings to turn functions into html. What Flask does is map a url to a python function. This allows us to set up event methods that are mapped to a particular URL.
 
 
 # Bibliography
 
++ Python Tree Data Sctructure. (n.d.). Retrieved from http://stackoverflow.com/questions/3009935/looking-for-a-good-python-tree-data-structure 
 
-http://stackoverflow.com/questions/3009935/looking-for-a-good-python-tree-data-structure
-https://docs.python.org/2/library/urllib.html
-https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
+
++  Open Arbitrary Resources by URL. (n.d). Retrieved from https://docs.python.org/2/library/urllib.html
+
++ What are "CPU seconds"?. (n.d.). Retrieved from https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
+
++ Data Structures. (n.d.). Retrieved from
 https://docs.python.org/3/tutorial/datastructures.html
