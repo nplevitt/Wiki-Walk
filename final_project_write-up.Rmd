@@ -25,9 +25,9 @@ The goal of this project is to create a measure a relationship in terms of degre
 
 ## Overview of Available Options
 
-For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia english language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
+For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
 
-1. The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
+1. The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
 2. **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
 
@@ -40,7 +40,7 @@ For this project we require Wikipedia data. More specifically, we require all of
 
 ## Drawbacks and Advantages of Acquisition Options
 
-+ The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
++ The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
 This option had to be quickly discarded because even though the dump was successfully stored in our local machines, it would have been impossible to host on pythonanywhere.com. pythonanywhere.com limits the amount of storage on disk that is available to the user as well as the 'CPU seconds'. 'CPU seconds' would not necessarily be the limiting factor for our project since these are only used up when the CPU is actually busy. Our limiting factor was more on the storage limitations.
 
@@ -54,7 +54,7 @@ Pywikibot allows about 5,000 article downloads without being stopped. Even thoug
 
 + **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
 
-This ides proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to always get the shortest path between two terms. When trying to switch to the full english interconnectedness files, storage again became a limiting factor. The English language full dump is 40GB, so this again proved impossible.
+This ides proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to always get the shortest path between two terms. When trying to switch to the full English interconnectedness files, storage again became a limiting factor. The English language full dump is 40GB, so this again proved impossible.
 
 + **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
 
@@ -94,7 +94,7 @@ For example:
       Natural satellite</a>"'
 
 
-Once we obtain a link object, we look for the "<a>" anchor to get the actual part of the text which contains the "<href>" , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
+Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
 
 
 ### Linked List
@@ -122,16 +122,24 @@ The proposed solution for this problem is the following:
 The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file. 
 
 ### Data types for Storing hierarchical data
-Once we have the list of links from an article, we need to be able to store the term for which we began our search, and its first ten links in the article. Then, for those ten, we need to store its first ten links and so on and so forth.
+
+To be able to find relationships between the terms that the user chooses (i.e find the shortest path between two terms), we need a very specific data structure. To iterate a tree-like data structure, python provides list functionality. 
+
+A simple example is:
+
+![Tree-like iteration with lists](sample_code.png)
+
 
 \pagebreak
 
 ## Journey through shortest path
-As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimicks that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B. 
+As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimics that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B. 
 
 ![Journey Step Example](journey.png)
 
 In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality page'.
+
+Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like. 
 
 
 # Other tools used 
@@ -140,13 +148,15 @@ In the example above, the journey has taken us to the 'Taxonomy_biology' page an
 
 To get the list of links, we use BeautifulSoup to parse the html returned from our request to Wikipedia.
 
+To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers. 
 
-To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers.
-
+Flask is used to provide all of the functional bindings to turn functions into html. What Flask does is map a url to a python function. This allows us to set up event methods that are mapped to a particular URL. 
 
 
 # Bibliography
 
+
+http://stackoverflow.com/questions/3009935/looking-for-a-good-python-tree-data-structure
 https://docs.python.org/2/library/urllib.html
 https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
 https://docs.python.org/3/tutorial/datastructures.html
