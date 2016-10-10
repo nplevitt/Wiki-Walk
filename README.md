@@ -24,28 +24,28 @@ For this project we require Wikipedia data. More specifically, we require all of
 
 ## Exploration of Different Acquisition Options
 
-1. The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
++ The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
 This option had to be quickly discarded because even though the dump was successfully stored in our local machines, it would have been impossible to host on pythonanywhere.com. pythonanywhere.com limits the amount of storage on disk that is available to the user as well as the 'CPU seconds'. 'CPU seconds' would not necessarily be the limiting factor for our project since these are only used up when the CPU is actually busy. Our limiting factor was more on the storage limitations.
 
 
-2. **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
++ **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
 
 Using a python library that provides functionality to work with wikipedia pages seemed very reasonable since it seems like many people around the web are using it to update article content and give maintenance to content.
 
 Pywikibot allows about 5,000 article downloads without being stopped. Even though this seems like a viable solution, we need to make sure that the subset of articles is very interconnected so that there can be a shortest path solution between terms. Making sure that the subset was that interconnected proved to be a difficult task and this option had to be foregone.
 
 
-3. **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
++ **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
 
 This ides proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to always get the shortest path between two terms. When trying to switch to the full english interconnectedness files, storage again became a limiting factor. The English language full dump is 40GB, so this again proved impossible.
 
-4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
++ **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
 
 This was the viable solution for the data part of the 'Build a Path' part of the project.
 
 
-5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
++ Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
 
 
 
