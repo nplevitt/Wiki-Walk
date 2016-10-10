@@ -1,13 +1,29 @@
+---
+title: "Wikipedia Degrees of Separation"
+author: "Andre Duarte, Nick Levitt, Shivakanth Thudi, Juan Pablo Oberhauser"
+date: "October 10, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+    toc: true
+    toc_depth: 2
+header-includes:
+- \usepackage{setspace}
+- \doublespacing
+---
+
 # Project Description
 
-The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called "Build a Path" and the second is called "Find a Path".
+The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**.
+
+![Landing Page with 2 traversal method options](landing.png)
 
 # Executive Summary
 
 
 # Data Acquisition
 
-## Overview
+## Overview of Available Options
 
 For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia english language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
 
@@ -22,7 +38,7 @@ For this project we require Wikipedia data. More specifically, we require all of
 5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
 
 
-## Exploration of Different Acquisition Options
+## Drawbacks and Advantages of Acquisition Options
 
 + The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
@@ -51,7 +67,7 @@ This was the viable solution for the data part of the 'Build a Path' part of the
 
 **The two methods that are used in the final implementation of this project are CURLing articles on the fly for the 'Build a Path' part, and getting a subset of 400 fully-connected articles to build a traversable tree for the 'Find a Path' part of the project.**
 
-# CURL Solution
+# CURL Solution for 'Build a Path'
 
 For the 'Build a Path' section, we use urllib2 functions, specifically urlopen(). This allows us to open a **network object** for reading. To get the URL, we get the user-input term and make a URL to send a request to. To ensure functionality, we use error handling in the URLs in the following manner.
 
@@ -72,7 +88,10 @@ After the retrieval of the text, we look at all of the pieces of html containing
 
 For example:
 
-      '"<div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="hatnote" role="note">This article is about artificial satellites. For natural satellites, also known as moons, see <a href="/wiki/Natural_satellite" title="Natural satellite">Natural satellite</a>"'
+      '"<div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en">
+      <div class="hatnote" role="note">
+      This article is about artificial satellites. For natural satellites, also known as moons, see <a                                 href="/wiki/Natural_satellite" title="Natural satellite">
+      Natural satellite</a>"'
 
 
 Once we obtain a link object, we look for the "<a>" anchor to get the actual part of the text which contains the "<href>" , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
@@ -88,24 +107,34 @@ This linked list still provides challenges in the sense that in order to visuali
 
 
 
-## Solution for Degrees of Separation and Shortest Path
+# Solution for Degrees of Separation and 'Find a Path'
 
-As opposed to the 'Build '
+As opposed to the 'Build a Path' section of the project, the 'Find a Path' needs to find the shortest path between two given terms that are user-input. This provides a challenging data acquisition project since to find a path from Article A to Article B, we need to ensure there is in a fact a way to get there using only links in each article. 
 
-Getting a subset of 400 articles,
+The proposed solution for this problem is the following:
 
-400 nodes with children, containing the first 5 links in the article.
+1. Get a subset of 400 articles (Parent)
 
-Secondly, to obtain the nearest path to get from one search term to another, it is not sufficient to get a list of links for each article on the fly.
+2. For each article, get 5 links contained in the article (Children), making sure that each Child links back to the Parent.
 
-## Journey through shortest path
+3. Create traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent. 
 
+The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file. 
 
-
-## Data types for Storing hierarchical data
+### Data types for Storing hierarchical data
 Once we have the list of links from an article, we need to be able to store the term for which we began our search, and its first ten links in the article. Then, for those ten, we need to store its first ten links and so on and so forth.
 
+\pagebreak
 
+## Journey through shortest path
+As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimicks that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B. 
+
+![Journey Step Example](journey.png)
+
+In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality page'.
+
+
+# Other tools used 
 
 ## Flask, Selenium, and BeautifulSoup
 
