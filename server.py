@@ -276,7 +276,10 @@ def take_journey():
 
     start_node = request.cookies.get('start_node') # get cookie called 'ID'
     end_node = request.cookies.get('end_node') # get cookie called 'ID'
-    takeJourney(start_node, end_node)
+    try:
+    	takeJourney(start_node, end_node)
+    except:
+    	pass
 
     return html % (urllib2.unquote(start_node), urllib2.unquote(end_node))
 
