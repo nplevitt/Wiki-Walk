@@ -5,9 +5,9 @@ digraph g {
 	"Taxonomy_(biology)" -> "Domain_(biology)";
 	"Domain_(biology)" -> "Life";
 	"Life" -> "Biology";
-	"Biology" -> "Life_science";
-	"Life_science" -> "Biotechnology";
-	"Biotechnology" -> "Medicine";
-	"Medicine" -> "Physician";
-	"Physician" -> "Bachelor_of_Medicine,_Bachelor_of_Surgery";
+	"Biology" -> "Natural_science";
+	"Natural_science" -> "Astronomy";
+	"Astronomy" -> "Asteroid";
+	"Asteroid" -> "C-type_asteroid";
+	"C-type_asteroid" -> "10_Hygiea";
 }

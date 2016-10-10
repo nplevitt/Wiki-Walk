@@ -276,9 +276,9 @@ def take_journey():
 
     start_node = request.cookies.get('start_node') # get cookie called 'ID'
     end_node = request.cookies.get('end_node') # get cookie called 'ID'
-    takeJourney(urllib2.unquote(start_node), urllib2.unquote(end_node))
+    takeJourney(start_node, end_node)
 
-    return html % (start_node, end_node)
+    return html % (urllib2.unquote(start_node), urllib2.unquote(end_node))
 
 @app.route("/start_over", methods = ['GET', 'POST'])
 def start_over():
