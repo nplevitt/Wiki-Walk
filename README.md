@@ -48,13 +48,17 @@ This was the viable solution for the data part of the 'Build a Path' part of the
 + Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
 
 
-
-
-
-Another alternative to a full article dump is to use some of the wikipedia python bots that have been created and open-sourced to get up to 5,000 articles at once. There was a third alternative, which was to utilize XML dumps from the article contents which are easily sub-settable by topic or by popularity, but since the XML file contain plain-text only from the article, we would not be able to see which links are embedded in the article.
-
-
 # CURL Solution
+
+For the 'Build a Path' section, we use urllib2 functions, specifically urlopen(). This allows us to open a **network object** for reading. To get the URL, we get the user-input term and make a URL to send a request to. To ensure functionality, we use error handling in the URLs in the following manner.
+
+      def getLinksFromSearchString(searchString):
+      	searchURL = template_wikiURL % searchString
+      	URL = mainWikiURL % searchURL
+      	try:
+      		return getLinksFromURL(URL)
+      	except:
+      		return ["%s is not a valid search term" % searchString]
 
 ## Solution for List of Links (1st step for acquiring data)
 
@@ -92,11 +96,17 @@ Once we have the list of links from an article, we need to be able to store the 
 
 
 
-## Flask and Selenium
+## Flask, Selenium, and BeautifulSoup
+
+To get the list of links, we use BeautifulSoup to parse the html returned from our request to Wikipedia.
+
 
 To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers.
 
 
 
+# Bibliography
+
+https://docs.python.org/2/library/urllib.html
 https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
 https://docs.python.org/3/tutorial/datastructures.html
