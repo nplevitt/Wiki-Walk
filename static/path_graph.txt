@@ -1,11 +1,13 @@
 digraph g {
 	rankdir=LR;
-	"Abiogenesis" -> "Astrobiology";
-	"Astrobiology" -> "Life_science";
-	"Life_science" -> "Biology";
+	"Älmhult_Municipality" -> "Carl_Linnaeus";
+	"Carl_Linnaeus" -> "Taxonomy_(biology)";
+	"Taxonomy_(biology)" -> "Domain_(biology)";
+	"Domain_(biology)" -> "Life";
+	"Life" -> "Biology";
 	"Biology" -> "Organism";
-	"Organism" -> "Host_(biology)";
-	"Host_(biology)" -> "Mutualism_(biology)";
-	"Mutualism_(biology)" -> "Interspecific_competition";
-	"Interspecific_competition" -> "Abiotic_component";
+	"Organism" -> "Microorganism";
+	"Microorganism" -> "Unicellular_organism";
+	"Unicellular_organism" -> "Eukaryotic";
+	"Eukaryotic" -> "Édouard_Chatton";
 }

@@ -1,4 +1,6 @@
 digraph g {
 	rankdir=LR;
-	"Italy" -> "Il Canto degli Italiani";
+	"President of Italy" -> "Italy";
+	"Italy" -> "President of Italy";
+	"Italy" -> "European Union";
 }
