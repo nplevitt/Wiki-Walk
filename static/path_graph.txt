@@ -1,12 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"Älmhult_Municipality" -> "Carl_Linnaeus";
-	"Carl_Linnaeus" -> "Taxonomy_(biology)";
-	"Taxonomy_(biology)" -> "Domain_(biology)";
-	"Domain_(biology)" -> "Life";
-	"Life" -> "Biology";
-	"Biology" -> "Organism";
-	"Organism" -> "Fungus";
-	"Fungus" -> "Amanita_muscaria";
-	"Amanita_muscaria" -> "Amanitaceae";
+	"Chemist" -> "Chemist_(disambiguation)";
 }
