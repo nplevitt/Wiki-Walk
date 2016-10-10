@@ -81,11 +81,8 @@ def htmlList(listOfLinks, searchString):
 	%s
 	</table>"""
 
-	if len(listOfLinks)==1:
-		html_header = "<tr><th>%s: 0 links</th></tr>" % searchString
-		html_entry = "<tr><td>%s</td></tr>" % listOfLinks[0][0]
-		html = html_template % (html_header, html_entry)
-		return html
+	if searchString=="":
+		return "This page does not exist on Wikipedia"
 	else:
 		href = mainWikiURL % template_wikiURL % searchString
 		html_header = "<tr><th><a href='%s'>%s</a>: %d links</th></tr>" % (href, searchString, len(listOfLinks))
