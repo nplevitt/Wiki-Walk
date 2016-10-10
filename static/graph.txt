@@ -1,4 +1,4 @@
 digraph g {
 	rankdir=LR;
-	"Iceland" -> "Lofsngur";
+	"Dog" -> "Jurassic";
 }
