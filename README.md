@@ -1,6 +1,6 @@
 # Project Description
 
-The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. 
+The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called "Build a Path" and the second is called "Find a Path".
 
 # Executive Summary
 
@@ -9,7 +9,22 @@ The goal of this project is to create a measure a relationship in terms of degre
 
 ## Overview
 
-To begin analyzing the degrees of separation between two terms found in wikipedia, we first need to acquire data. For doing this, there are several options, some of which include a full data-dump of the English language wikipedia articles, utilizing a python bot to download 5,000 articles, CURL wikipedia each time a search term is entered, or build a small collection of interconnected articles and use that as the basis for analysis.
+For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia english language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
+
+1. The english language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
+
+2. **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
+
+3. **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
+
+4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
+
+5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
+
+
+
+
+To begin analyzing the degrees of separation between two terms found in wikipedia, we first need to acquire data. For doing this, there are several options, some of which include a full data-dump of the English language wikipedia articles, utilizing a python bot to download 5,000 articles, CURL wikipedia each time a search term is entered, or build a small collection of interconnected articles and use that as the basis for analysis. Another option that was discussed was to utilize some of the .sql files that Wikipedia provides which contain all of the inter-relationships between articles. To test this possible solution, we used a subset of articles from the Philippines and got that to work, but again the sheer size of the file for the english language wikipedia made it impossible to keep exploring this solution.
 
 The data acquisition part of this project has proven challenging given that a full English language Wikipedia dump is too large (15GB compressed) to store on an application like PythonAnywhere. One alternative to a full dump was to obtain a subset of articles, which could be problematic since we are trying to find relationships between multiple search terms, and if the search term happens to not be included in the subset, there would be no way to calculate the degrees of separation between the terms.
 
@@ -53,7 +68,7 @@ Once we have the list of links from an article, we need to be able to store the 
 
 ## Flask and Selenium
 
-
+To provide the "journey" functionality, Selenium python bindings were utilized. These bindings provide API access to web-drivers or web browsers.
 
 
 
