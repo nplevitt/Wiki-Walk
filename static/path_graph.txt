@@ -1,4 +1,12 @@
 digraph g {
 	rankdir=LR;
-	"Chemist" -> "Chemist_(disambiguation)";
+	"1_(number)" -> "Number";
+	"Number" -> "Mathematics";
+	"Mathematics" -> "Science";
+	"Science" -> "Outline_of_physical_science";
+	"Outline_of_physical_science" -> "Life_science";
+	"Life_science" -> "Biotechnology";
+	"Biotechnology" -> "Bioengineering";
+	"Bioengineering" -> "Heinz_Wolff";
+	"Heinz_Wolff" -> "Ali_G";
 }

@@ -12,11 +12,12 @@ header-includes:
 - \doublespacing
 ---
 
+\newpage
 # Project Description
 
-The goal of this project is to create a measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
+The goal of this project is to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
 
-![Landing Page with 2 traversal method options](landing.png)
+![Landing page with 2 traversal method options](landing.png)
 
 Figure 2 shows an example view of the 'Build a Path' visualization on pythonanywhere.com
 
@@ -35,7 +36,7 @@ Figure 3 shows the result of a shortest path result.
 
 ## Overview of Available Options
 
-For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all of the link contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
+For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all the links contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
 
 1. The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
@@ -45,7 +46,7 @@ For this project we require Wikipedia data. More specifically, we require all of
 
 4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
 
-5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
+5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents (terms) and children (links in the term article) to find the shortest path.
 
 
 ## Drawbacks and Advantages of Acquisition Options
@@ -127,12 +128,12 @@ The proposed solution for this problem is the following:
 
 2. For each article, get 5 links contained in the article (Children), making sure that each Child links back to the Parent.
 
-3. Create traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent.
+3. Create a traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent.
 
 The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file.
 
 
-### Data types for Storing hierarchical data
+### Data types for storing hierarchical data
 
 To be able to find relationships between the terms that the user chooses (i.e find the shortest path between two terms), we need a very specific data structure. To iterate a tree-like data structure, python provides list functionality.
 
@@ -148,7 +149,7 @@ As a visual bonus for the user, we have included a visual journey through the sh
 
 ![Journey Step Example](journey.png)
 
-In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality page'.
+In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality' page.
 
 Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like.
 
