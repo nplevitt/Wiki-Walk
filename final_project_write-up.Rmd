@@ -15,19 +15,23 @@ header-includes:
 \newpage
 # Project Description
 
-The goal of this project is to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
+The goal of this project is to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between two Wikipedia search terms is defined by the number of clicks necessary to go from one article to the other, only using links within each subsequent Wikipedia page. This calculation is a proxy for "how closely related" those two search terms are.
+
+Two methods of traversal can be envisioned. The first is to start at a specific Wikipedia page, and iteratively navigate Wikipedia without knowing the final landing page. The user starts at a page and clicks links until he decides to stop. The second is to find a path (hopefully the shortest one) between two terms. The number of pages in that path (minus 1) is the degrees of separation between the two terms.
+
+In this project, we implemented both approaches to this problem. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"**, while the second is called **"Find a Path"**.
+
+Ultimately, the user has the choice of which traveral method he wishes to explore, and so he is given a choice right from the landing page of the server, as shown in Figure 1.
 
 ![Landing page with 2 traversal method options](landing.png)
 
-Figure 2 shows an example view of the 'Build a Path' visualization on pythonanywhere.com
-
+Let's suppose a user chooses to explore Wikipedia from astarting page, with no final page in mind. He selects to start at **Italian cuisine**, which leads him to **Italians**, then **Canda**, and finally **Latin**. Figure 2 shows a glimpse of what the user sees and how the pages he has visited are interconnected.
 
 ![Build Path View](build_path.png)
 
-Figure 3 shows the result of a shortest path result. 
+Now, let's imagine the user wants to find the shortest path (within a subsection of Wikipedia, more on this later) between the terms **Ageing** and **Abiogenesis**. By selecting the **Find a Path** option with these terms, he is shown the result in Figure 3.
 
 ![Shortest Path View](shortest_path.png)
-
 
 \pagebreak
 
@@ -90,7 +94,7 @@ For the 'Build a Path' section, we use urllib2 functions, specifically urlopen()
       	except:
       		return ["%s is not a valid search term" % searchString]
 
-## Solution for List of Links (1st step for acquiring data)
+## Solution for List of Links
 
 Given the difficulty of dealing with a data dump and the difficulty of using the python bot to extract information, we will be implementing a script that does a request to a given URL and brings back the html, to be parsed using BeautifulSoup.
 
@@ -99,23 +103,24 @@ After the retrieval of the text, we look at all of the pieces of html containing
 
 For example:
 
-      '"<div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en">
+      <div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en">
       <div class="hatnote" role="note">
-      This article is about artificial satellites. For natural satellites, also known as moons, see <a                                 href="/wiki/Natural_satellite" title="Natural satellite">
-      Natural satellite</a>"'
+      This article is about artificial satellites. For natural satellites, also known as moons,
+      see <a href="/wiki/Natural_satellite" title="Natural satellite"> Natural satellite</a>
 
 
-Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
+Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters. This way, for each page that is scraped, we store all the links to other Wikipedia pages in a list.
 
 
-### Linked List
+### Storing linked elements
 
-As a first solution to store the data of which links are in the article of the selected search term, we store article names and links in a linked list. We propose the linked list solution since it provides with a way to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked from that first list, and so on.
+As a first solution to store the connectedness of the articles, we thought about using a linked list approach. This would allow us to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked from that first list, and so on.
 
-This data structure provides enough flexibility in that insertion at the final index is fast. Given that no additions are expected to be made to an index in the middle of the list (given its chronological nature), there is no need to insert or update pointers within the list. Another useful characteristic of the linked list is that to perform a search, the program checks at each node starting from the first node and returns the first instance of where a match is found.
+Although this method seems intuitive, it would not work for our purposes. In fact, we wish to store two pieces of information: the sequential list of articles visited, as well as how they connect with each other. If the user went back to a page that he previously visited, then the order of the visits would get lost.
 
-This linked list still provides challenges in the sense that in order to visualize the user's steps through the links, there needs to be a method to check for previously clicked-on links.
+We therefore opted to keep two structures to store the information. First, a list of visited pages, where each subsequent page is appended to the list. Second, a dictionary of connected pages, where each key is associated with the article that it links to.
 
+Another advatange of using a dictionary in this way is that it can easily be transformed into a directed graph text notation that can be passed to the command line's **dot** function, which produces a graph image (that we display to the user).
 
 
 # Solution for Degrees of Separation and 'Find a Path'
