@@ -15,7 +15,7 @@ header-includes:
 \newpage
 # Executive Summary
 
-The goal of this project was to implement an application that displayed the degrees of separation between topics on Wikipedia. We accomplished this with an interactive program that allowed users to visually see the shortest path between two topics. Users can select a start and end term from a dropdown menu, and the program will take them on the shortest journey between these topics through an automated process that clicks on the relevant Wikipedia links.
+The goal of this project was to implement an application that displayed the degrees of separation between topics on Wikipedia. We accomplished this with an interactive program that allows users to visually see the shortest path between two topics. Users can select a start and end term from a dropdown menu, and the program will take them on the shortest journey between these topics through an automated process that clicks on the relevant Wikipedia links.
 
 Due to data storage limits on the server and potentially long run-times, the program was implemented on a fully connected subset of articles, rather than all of Wikipedia. However, given more resources, the program can be easily scaled up to get the degrees of separation between any two topics on Wikipedia. 
 
