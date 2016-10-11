@@ -13,9 +13,20 @@ header-includes:
 ---
 
 \newpage
+# Executive Summary
+
+The goal of this project was to implement an application that displayed the degrees of separation between topics on Wikipedia. We accomplished this with an interactive program that allowed users to visually see the shortest path between two topics. Users can select a start and end term from a dropdown menu, and the program will take them on the shortest journey between these topics through an automated process that clicks on the relevant Wikipedia links.
+
+Due to data storage limits on the server and potentially long run-times, the program was implemented on a fully connected subset of articles, rather than all of Wikipedia. However, given more resources, the program can be easily scaled up to get the degrees of separation between any two topics on Wikipedia. 
+
+The program can be found at **https://github.com/nplevitt/692_Final_Project. **The user can run **server.py** to interactively build or find a path between two topics. 
+
+Alternatively, if users just want to see the shortest path between two topics, they can go to **http://aguimaraesduarte.pythonanywhere.com. ** 
+
+\newpage
 # Project Description
 
-The goal of this project is to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
+The goal of this project was to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between wikipedia search terms would be calculated by counting the number of links that would need to be clicked, starting with a link contained in the first article, until the second search term is reached. This calculation would be a proxy for "how closely related" those two search terms are. There are two main options that the user can select. The first is to build a path from one wikipedia article to another, starting with a selected term. The second is to find a path between two terms that the user selects. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"** and the second is called **"Find a Path"**. Figure 1 shows the landing page where the user can select which project to explore. 
 
 ![Landing page with 2 traversal method options](landing.png)
 
@@ -36,7 +47,7 @@ Figure 3 shows the result of a shortest path result.
 
 ## Overview of Available Options
 
-For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all the links contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
+For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all the links contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or adopt a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
 
 1. The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
@@ -46,7 +57,7 @@ For this project we require Wikipedia data. More specifically, we require all of
 
 4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
 
-5. Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents (terms) and children (links in the term article) to find the shortest path.
+5. Build a fully connected tree from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents (terms) and children (links in the term article) to find the shortest path.
 
 
 ## Drawbacks and Advantages of Acquisition Options
@@ -72,11 +83,13 @@ This ides proved doable with a subset of data from the Philippines. We were able
 This was the viable solution for the data part of the 'Build a Path' part of the project.
 
 
-+ Build a fully connected tree of from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
++ Build a fully connected tree from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
 
 
 
 **The two methods that are used in the final implementation of this project are CURLing articles on the fly for the 'Build a Path' part, and getting a subset of 400 fully-connected articles to build a traversable tree for the 'Find a Path' part of the project.**
+
+\newpage
 
 # CURL Solution for 'Build a Path'
 
@@ -95,7 +108,7 @@ For the 'Build a Path' section, we use urllib2 functions, specifically urlopen()
 Given the difficulty of dealing with a data dump and the difficulty of using the python bot to extract information, we will be implementing a script that does a request to a given URL and brings back the html, to be parsed using BeautifulSoup.
 
 
-After the retrieval of the text, we look at all of the pieces of html containing a "class: mw-content-ltr"
+After the retrieval of the text, we look at all of the pieces of html containing a "class: mw-content-ltr".
 
 For example:
 
@@ -105,12 +118,12 @@ For example:
       Natural satellite</a>"'
 
 
-Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
+Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , and store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters.
 
 
 ### Linked List
 
-As a first solution to store the data of which links are in the article of the selected search term, we store article names and links in a linked list. We propose the linked list solution since it provides with a way to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked from that first list, and so on.
+As a first solution to store the data of which links are in the article of the selected search term, we store article names and links in a linked list. We propose the linked list solution since it provides a way to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked on from that first list, and so on.
 
 This data structure provides enough flexibility in that insertion at the final index is fast. Given that no additions are expected to be made to an index in the middle of the list (given its chronological nature), there is no need to insert or update pointers within the list. Another useful characteristic of the linked list is that to perform a search, the program checks at each node starting from the first node and returns the first instance of where a match is found.
 
@@ -153,13 +166,11 @@ In the example above, the journey has taken us to the 'Taxonomy_biology' page an
 
 Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like.
 
-
-# Other tools used
-
 ## Encoding Issues
 
-Given that some of the titles in the wikipedia articles contain non-ASCII characters, we provide an automated solution where each time article information is retrieved from the web, we convert everything to ASCII characters. 
+Given that some of the titles in the wikipedia articles contain non-ASCII and unicode characters, we had some encoding issues when displaying the links. However, we resolved this with a simple fix - we grabbed the link title text associated with each link, and used that to display the links instead. For example Baden-W%C3%BCrttemberg could be correctly displayed by grabbing the title associated with this href on Wikipedia, which was title="Baden-Württemberg". 
 
+# Other tools used
 
 ## Flask, Selenium, and BeautifulSoup
 
