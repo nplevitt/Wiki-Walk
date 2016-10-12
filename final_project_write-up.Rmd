@@ -28,7 +28,7 @@ Alternatively, if users just want to see the shortest path between two topics, t
 
 The goal of this project is to create and measure a relationship in terms of degrees of separation between certain terms in Wikipedia. The degrees of separation between two Wikipedia search terms is defined by the number of clicks necessary to go from one article to the other, only using links within each subsequent Wikipedia page. This calculation is a proxy for "how closely related" those two search terms are.
 
-Two methods of traversal can be envisioned. The first is to start at a specific Wikipedia page, and iteratively navigate Wikipedia without knowing the final landing page. The user starts at a page and clicks links until he decides to stop. The second is to find a path (hopefully the shortest one) between two terms. The number of pages in that path (minus 1) is the degrees of separation between the two terms.
+Two methods of traversal can be envisioned. The first is to start at a specific Wikipedia page, and iteratively navigate Wikipedia without knowing the final landing page. The user starts at a page and clicks links until he decides to stop. The second is to find a path between two pre-selected terms. The number of pages, minus one, in that path is the degrees of separation between the two terms.
 
 In this project, we implemented both approaches to this problem. Each part of the project presents its own algorithmic, data storage, and data retrieval challenges that will be further discussed. The first option is called **"Build a Path"**, while the second is called **"Find a Path"**.
 
@@ -36,11 +36,11 @@ Ultimately, the user has the choice of which traveral method he wishes to explor
 
 ![Landing page with 2 traversal method options](landing.png)
 
-Let's suppose a user chooses to explore Wikipedia from astarting page, with no final page in mind. He selects to start at **Italian cuisine**, which leads him to **Italians**, then **Canda**, and finally **Latin**. Figure 2 shows a glimpse of what the user sees and how the pages he has visited are interconnected.
+Let's suppose a user chooses to explore Wikipedia from a starting page, with no final page in mind. He selects to start at **Italian cuisine**, which leads him to **Italians**, then **Canda** and finally **Latin**. Figure 2 shows a glimpse of what the user sees and how the pages he has visited are interconnected.
 
 ![Build Path View](build_path.png)
 
-Now, let's imagine the user wants to find the shortest path (within a subsection of Wikipedia, more on this later) between the terms **Ageing** and **Abiogenesis**. By selecting the **Find a Path** option with these terms, he is shown the result in Figure 3.
+Now, let's imagine the user wants to find the shortest path (within the given subset of Wikipedia) between the terms **Ageing** and **Abiogenesis**. By selecting the **Find a Path** option with these terms, he is shown the result in Figure 3.
 
 ![Shortest Path View](shortest_path.png)
 
@@ -51,53 +51,52 @@ Now, let's imagine the user wants to find the shortest path (within a subsection
 
 ## Overview of Available Options
 
-For this project we require Wikipedia data. More specifically, we require all of the wikipedia search terms or article titles, and a list of all the links contained in each article. The wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or adopt a different methodology to get this data. We propose several solutions, their tests, and drawbacks.
+For this project we require Wikipedia data. More specifically, we require all of the Wikipedia search article titles and a list of all the links contained in each article. The Wikipedia English language dump is 15 GB compressed, so we have to be creative in our solution to acquire either a subset of articles or adopt a different methodology to get this data. We propose several solutions, their tests and drawbacks.
 
 1. The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
 2. **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
 
-3. **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
+3. **SQL interconnectedness files** provided by Wikipedia: Files contain metadata on what links are found within every article.
 
-4. **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
+4. **CURL the urls** for the article that is chosen on the fly: Iteratively get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
 
-5. Build a fully connected tree from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents (terms) and children (links in the term article) to find the shortest path.
+5. Build a fully connected tree from a **subset of articles**: Limit the search options to terms included in the subset, but allow for full navigations between all articles (structured as parent and children nodes) to find the shortest path.
 
 
 ## Drawbacks and Advantages of Acquisition Options
 
 + The English language static **html dump:** "A copy of all pages from all Wikipedia wikis, in HTML form." (14.3 GB as a .7z file)
 
-This option had to be quickly discarded because even though the dump was successfully stored in our local machines, it would have been impossible to host on pythonanywhere.com. pythonanywhere.com limits the amount of storage on disk that is available to the user as well as the 'CPU seconds'. 'CPU seconds' would not necessarily be the limiting factor for our project since these are only used up when the CPU is actually busy. Our limiting factor was more on the storage limitations.
+This option was quickly discarded because, even though the dump was successfully stored in our local machines, it would have been impossible to host on pythonanywhere.com. pythonanywhere.com limits the amount of storage on disk that is available to the user and the full static dump far exceeds this limit.
 
 
 + **Pywikibot:** Python library that provides functionality to automate work on Wikipedia sites.
 
-Using a python library that provides functionality to work with wikipedia pages seemed very reasonable since it seems like many people around the web are using it to update article content and give maintenance to content.
+Using a python library that provides functionality to work with Wikipedia pages seemed very reasonable since it seems like many people around the web are using it to update article content and give maintenance to content.
 
-Pywikibot allows about 5,000 article downloads without being stopped. Even though this seems like a viable solution, we need to make sure that the subset of articles is very interconnected so that there can be a shortest path solution between terms. Making sure that the subset was that interconnected proved to be a difficult task and this option had to be foregone.
-
-
-+ **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on which articles contain which links.
-
-This ides proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to always get the shortest path between two terms. When trying to switch to the full English interconnectedness files, storage again became a limiting factor. The English language full dump is 40GB, so this again proved impossible.
-
-+ **CURL the urls** for the article that is chosen on the fly, get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
-
-This was the viable solution for the data part of the 'Build a Path' part of the project.
+Pywikibot allows 5,000 links to be scraped from a given Wikipedia page. Even though this seems like a viable solutions, we needed to make sure that the subset of articles is fully connected so there is always a path between any two nodes. Making sure the subset had this connectedness proved to be a difficult task, and one that Pywikibot could not accomplish on its own.
 
 
-+ Build a fully connected tree from a **subset of articles**, limiting search options to terms included in the subset, and navigate the tree of parents(terms) and children(links in the term article) to find the shortest path.
++ **SQL interconnectedness files**, provided by Wikipedia. Files contain metadata on what links are found within every article.
+
+This idea proved doable with a subset of data from the Philippines. We were able to download the files and search through the content in the file. We used a shortest path algorithm and were able to find the shortest path between any two terms. When using the full English interconnectedness files, however, storage again became the limiting factor because the English language full dump is 40GB.
+
++ **CURL the urls** for the article that is chosen on the fly: Iteratively get the list of links from a parsed HTML, and provide a choice of new articles to explore and build a navigation path.
+
+This was the viable solution for the data aquisition part of the 'Build a Path' traversal method.
 
 
++ Build a fully connected tree from a **subset of articles**: Limit the search options to terms included in the subset, but allow for full navigations between all articles (structured as parent and children nodes) to find the shortest path.
 
-**The two methods that are used in the final implementation of this project are CURLing articles on the fly for the 'Build a Path' part, and getting a subset of 400 fully-connected articles to build a traversable tree for the 'Find a Path' part of the project.**
+
+**The two methods that are used in the final implementation of this project are CURLing articles on the fly for the 'Build a Path' method, and getting a subset of 400 fully-connected articles to build a traversable tree for the 'Find a Path' method.**
 
 \newpage
 
 # CURL Solution for 'Build a Path'
 
-For the 'Build a Path' section, we use urllib2 functions, specifically urlopen(). This allows us to open a **network object** for reading. To get the URL, we get the user-input term and make a URL to send a request to. To ensure functionality, we use error handling in the URLs in the following manner.
+For the 'Build a Path' section, we use urllib2 functions, specifically urlopen(). This allows us to open a **network object** for reading. To get the URL, we get the user-input term and send a request to constructed URL. To ensure functionality, we employ error handling in the URLs in the following manner:
 
       def getLinksFromSearchString(searchString):
       	searchURL = template_wikiURL % searchString
@@ -109,10 +108,10 @@ For the 'Build a Path' section, we use urllib2 functions, specifically urlopen()
 
 ## Solution for List of Links
 
-Given the difficulty of dealing with a data dump and the difficulty of using the python bot to extract information, we will be implementing a script that does a request to a given URL and brings back the html, to be parsed using BeautifulSoup.
+Given the difficulty of dealing with a data dump and the difficulty of using the python bot to extract information, we implement a script that does a request to a given URL and brings back the html to be parsed using BeautifulSoup.
 
 
-After the retrieval of the text, we look at all of the pieces of html containing a "class: mw-content-ltr".
+After the retrieval of the text, we look at all of the pieces of html containing a "mw-content-ltr" class tag.
 
 For example:
 
@@ -122,12 +121,12 @@ For example:
       see <a href="/wiki/Natural_satellite" title="Natural satellite"> Natural satellite</a>
 
 
-Once we obtain a link object, we look for the 'a' anchor to get the actual part of the text which contains the 'href' , we store that link and its name in a python list to be utilized when the html is rendered. At this stage of the search for a list of links in the article body, it is necessary to check for a valid link. To do so, we use string properties to check whether the URL string starts with 'wiki/' and check for invalid characters. This way, for each page that is scraped, we store all the links to other Wikipedia pages in a list.
+Once we obtain a link object, we look for the "a"" anchor to get the actual "href." We store that "link, name" pair in a python list to be utilized when the html is rendered. At this stage of the search it is necessary to check that the links returned are valid Wikipedia pages. To do this we use string properties to check whether the URL string starts with 'wiki/' and also check for invalid characters.
 
 
 ### Storing linked elements
 
-As a first solution to store the connectedness of the articles, we thought about using a linked list approach. This would allow us to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked from that first list, and so on.
+Our first solution to store the connectedness of the articles was to use a linked list. This would allow us to begin with a node (which is the first search term as input from the user) and a pointer, which will reference the next node on the list. The next node on the list will then contain the name of the article that was clicked from that first list, and so on.
 
 Although this method seems intuitive, it would not work for our purposes. In fact, we wish to store two pieces of information: the sequential list of articles visited, as well as how they connect with each other. If the user went back to a page that he previously visited, then the order of the visits would get lost.
 
@@ -138,7 +137,7 @@ Another advatange of using a dictionary in this way is that it can easily be tra
 
 # Solution for Degrees of Separation and 'Find a Path'
 
-As opposed to the 'Build a Path' section of the project, the 'Find a Path' needs to find the shortest path between two given terms that are user-input. This provides a challenging data acquisition project since to find a path from Article A to Article B, we need to ensure there is in a fact a way to get there using only links in each article.
+As opposed to the "Build a Path" section of the project, the "Find a Path" method needs to find the shortest path between two given terms that are user-input. This provides a challenging data acquisition project since to find a path from Article A to Article B, we need to ensure there is in a fact a way to get there using only links.
 
 The proposed solution for this problem is the following:
 
@@ -148,26 +147,21 @@ The proposed solution for this problem is the following:
 
 3. Create a traversable tree with 400 Parent nodes, each of which has 5 children that link back to the parent.
 
-The limit of 400 articles makes sure that we have a very interconnected set of articles. Unlike the 'Build a Path' part which gets data on the fly, the 'Find a Path' section has all of the data pre-stored on disk and a tree of nodes that will traverse and find the nearest path between two terms each time the user inputs two terms. The tree is stored in a txt file.
+The limit of 400 articles is for both computational and storage purposes. Unlike the "Build a Path" part which gets data on the fly, the "Find a Path" section has all of the data pre-stored on disk and a set of functions that will traverse and find the nearest path between two terms. The tree is stored in a txt file.
 
 
 ### Data types for storing hierarchical data
 
-To be able to find relationships between the terms that the user chooses (i.e find the shortest path between two terms), we need a very specific data structure. To iterate a tree-like data structure, python provides list functionality.
-
-A simple example is:
-
-![Tree-like iteration with lists](sample_code.png)
-
+The traversable tree is stored as a sequential list of nodes. Because the tree is full, meaning every parent has a complete set of children, the traversal method is reliant only on the prior knowledge of how many children each parent has. The shortest path is calculated by first finding the paths of both the starting node back to the root and the ending node back to the root. These two paths must intersect at some point due to the full nature of the tree, so the path from start to intersection and then itersection to end is inherently the shortest path between the two.
 
 \pagebreak
 
 ## Journey through shortest path
-As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimics that shortest path and actually opens a browser window showing each click that it would take to get from Article A to Article B.
+As a visual bonus for the user, we have included a visual journey through the shortest path between two articles. Harnessing Selenium, we can create a visual tour that mimics that shortest path and actually opens a browser window and shows each click that it would take to get from Article A to Article B.
 
 ![Journey Step Example](journey.png)
 
-In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. this specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality' page.
+In the example above, the journey has taken us to the 'Taxonomy_biology' page and is now highlighting what the next step will be, which in this case is 'Domains'. This specific examples is a step in the journey to get to the 'Number 1' wikipedia page from the 'Almhult Municipality' page.
 
 Since the final project is being hosted on pythonanywhere.com, we need error handling around this 'Take the Journey' part because it would not be possible to open a driver with Selenium on this platform for each user. For this reason, we disable the take the journey part, and instead print a visual representation of what the shortest path would look like.
 
@@ -190,10 +184,12 @@ To provide the "journey" functionality, **Selenium** python bindings were utiliz
 
 + Python Tree Data Sctructure. (n.d.). Retrieved from http://stackoverflow.com/questions/3009935/looking-for-a-good-python-tree-data-structure 
 
-
 +  Open Arbitrary Resources by URL. (n.d). Retrieved from https://docs.python.org/2/library/urllib.html
 
-+ What are "CPU seconds"?. (n.d.). Retrieved from https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
++ What are "CPU seconds?" (n.d.). Retrieved from https://help.pythonanywhere.com/pages/WhatAreCPUSeconds
 
 + Data Structures. (n.d.). Retrieved from
 https://docs.python.org/3/tutorial/datastructures.html
+
++ Function to highlight links with Selenium. (n.d.). Based on code from 
+https://gist.github.com/dariodiaz/3104601
