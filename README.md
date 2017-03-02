@@ -86,6 +86,7 @@ This data structure provides enough flexibility in that insertion at the final i
 
 This linked list still provides challenges in the sense that in order to visualize the user's steps through the links, there needs to be a method to check for previously clicked-on links.
 
+![](static/buildPath.png)
 
 
 ## Solution for Degrees of Separation and Shortest Path
@@ -98,9 +99,11 @@ Getting a subset of 400 articles,
 
 Secondly, to obtain the nearest path to get from one search term to another, it is not sufficient to get a list of links for each article on the fly.
 
+![](static/shortest_path.png)
+
 ## Journey through shortest path
 
-
+![](gif/out2.gif)
 
 ## Data types for Storing hierarchical data
 Once we have the list of links from an article, we need to be able to store the term for which we began our search, and its first ten links in the article. Then, for those ten, we need to store its first ten links and so on and so forth.
