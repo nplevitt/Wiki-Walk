@@ -110,7 +110,7 @@ def updateVisited():
 		if currentPage not in visitedPages[previousPage]:
 			visitedPages[previousPage].append(currentPage)
 
-# dictToDot: transform dictionary d into a dot string that is saved into graph.txt.
+# dictToDot: transform dictionary <d> into a dot string that is saved into graph.txt.
 # graph.txt is converted into a graph.png image using command line dot function.
 # @param d: input directed dictionary
 # @return dot: string of connected graph for debugging purposes
@@ -127,6 +127,10 @@ def dictToDot(d):
 	os.system('dot -Tpng static/graph.txt > static/graph.png')
 	return dot
 
+# dictToPath: transform path <path> into a dot string that is saved into path_graph.txt.
+# path_graph.txt is converted into a path_graph.png image using command line dot function.
+# @param path: input list of visited pages
+# @return dot: string of connected graph for debugging purposes
 def dictToDotPath(path):
     dot = "digraph g {\n"
     dot += "\trankdir=LR;\n"

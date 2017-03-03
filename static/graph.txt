@@ -1,4 +1,7 @@
 digraph g {
 	rankdir=LR;
-	"Italy" -> "Italian language";
+	"Casino Royale (2006 film)" -> "Martin Campbell";
+	"Martin Campbell" -> "The Legend of Zorro";
+	"James Bond" -> "Daniel Craig";
+	"Daniel Craig" -> "Casino Royale (2006 film)";
 }

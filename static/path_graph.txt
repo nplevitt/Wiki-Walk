@@ -1,12 +1,13 @@
 digraph g {
 	rankdir=LR;
-	"1_(number)" -> "Number";
-	"Number" -> "Mathematics";
-	"Mathematics" -> "Science";
-	"Science" -> "Outline_of_physical_science";
-	"Outline_of_physical_science" -> "Life_science";
-	"Life_science" -> "Biotechnology";
-	"Biotechnology" -> "Bioengineering";
-	"Bioengineering" -> "Heinz_Wolff";
-	"Heinz_Wolff" -> "Ali_G";
+	"Abiotic_component" -> "Interspecific_competition";
+	"Interspecific_competition" -> "Mutualism_(biology)";
+	"Mutualism_(biology)" -> "Host_(biology)";
+	"Host_(biology)" -> "Organism";
+	"Organism" -> "Biology";
+	"Biology" -> "Life";
+	"Life" -> "Domain_(biology)";
+	"Domain_(biology)" -> "Taxonomy_(biology)";
+	"Taxonomy_(biology)" -> "Carl_Linnaeus";
+	"Carl_Linnaeus" -> "Älmhult_Municipality";
 }
