@@ -1,4 +1,4 @@
-# Wikipedia Degrees of Separation
+# Wiki-Walk
 
 ![Take the journey](gif/out2.gif)
 
